@@ -9,16 +9,20 @@
 #ifndef pricemodel_hpp
 #define pricemodel_hpp
 
-#include <stdio.h>
 #include <iostream>
 
 using namespace std;
 
+//class pricemodel{
+//public:
+//    double calculate_price(double time_start, double time_end);
+//    //double get_price(int time); //time is the index of price array
+//};
+
 class pricemodel{
-//    double price[24] = {0.12, 0.156, 0.165, 0.117, 0.194, 0.192, 0.318, 0.266, 0.326, 0.293, 0.388, 0.359, 0.447, 0.478, 0.513, 0.491, 0.457, 0.506, 0.640, 0.544, 0.592, 0.486, 0.499, 0.292};
 public:
-    double calculate_price(double time_start, double time_end);
-    //double get_price(int time); //time is the index of price array
+    double calculate_price(double time_s, double time_e, double cpu_usage);
 };
+
 
 #endif /* pricemodel_hpp */

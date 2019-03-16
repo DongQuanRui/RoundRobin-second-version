@@ -40,13 +40,14 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
         //sort based on task_end time
         
         sort(Task_process[i].begin(), Task_process[i].end(), sort_task_end);
+        int count = 0;
         for (int j = 0; j < Task_process[i].size(); j++)
         {
-            int count = 0;
+            
             if(Task_process[i][j].get_TASK_end() <= task.get_TIME_start())
             {
                 count++;
-                price_cal += price.calculate_price(Task_process[i][j].get_TIME_calculated(), Task_process[i][j].get_TASK_end(),CPU_used/Server.get_CPU_total());
+                price_cal += price.calculate_price(Task_process[i][j].get_TIME_calculated(), Task_process[i][j].get_TASK_end(),CPU_used/Server[i].get_CPU_total());
                 CPU_used -= Task_process[i][j].get_CPU_request();
             }
         }
@@ -58,7 +59,7 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
         {
             for (int j = 0; j < Task_process[i].size(); i++)
             {
-                price_cal += price.calculate_price(Task_process[i][j].get_TIME_calculated(), TASK.get_TASK_start(), CPU_used/Server.get_CPU_total())
+                price_cal += price.calculate_price(Task_process[i][j].get_TIME_calculated(), task.get_TASK_start(), CPU_used/Server[i].get_CPU_total());
             }
             Task_process[i].push_back(task);
             //Task::set_TASK_start(task.get_TIME_start());
@@ -77,7 +78,7 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
             if(Task_process[i][0].get_TASK_start() < task.get_TIME_start()){
                 task.set_TASK_start(Task_process[i][0].get_TASK_start());
                 task.set_TASK_end(Task_process[i][0].get_TASK_start() + task.get_TIME_end() - task.get_TASK_start());
-                task.set_TIME_calculated(task.get_TASK_start);
+                task.set_TIME_calculated(task.get_TASK_start());
             }
             
             //sort based on task_end
@@ -87,7 +88,7 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
             price_cal += price.calculate_price(Task_process[i][0].get_TIME_calculated(), task.get_TIME_start(), CPU_used/Server[i].get_CPU_total());
             for (int j = 0; j < Task_process[i].size(); j++)
             {
-                Task_process[i][j].set_TIME_calculated(task.get_TIME_start);
+                Task_process[i][j].set_TIME_calculated(task.get_TIME_start());
             }
             
             for (int j = 0; j < Task_process[i].size(); j++)
@@ -111,7 +112,7 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
                     }
                     task.set_TASK_start(Task_process[i][j].get_TASK_end());
                     task.set_TASK_end(Task_process[i][j].get_TASK_end() + task.get_TASK_end() - task.get_TASK_end());
-                    task.set_TIME_calculated(task.get_TASK_start);
+                    task.set_TIME_calculated(task.get_TASK_start());
                     Task_process[i].erase(Task_process[i].begin(), Task_process[i].begin() + j + 1);//pop tasks
                     Task_process[i].push_back(task);
                     flag = 1;

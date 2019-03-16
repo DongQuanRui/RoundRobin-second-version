@@ -66,6 +66,10 @@ void Task::set_TASK_end(double n){
     this->TIME_end = n;
 }
 
+void Task::set_TIME_calculated(double n){
+    this->TIME_calculated = n;
+}
+
 void Task::Readfrom(istream & infile){
     char comma;
     int index;
@@ -76,9 +80,7 @@ void Task::Readfrom(istream & infile){
     TIME_calculated = TASK_start;
 }
 
-void set_TIME_calculated(double n)v{
-    this->TIME_calculated = n;
-}
+
 
 //bool Task::sort_task_start(Task t1,Task t2){
 //    return t1.get_TASK_start() > t2.get_TASK_start();//???????
