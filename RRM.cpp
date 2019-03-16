@@ -77,6 +77,7 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
             if(Task_process[i][0].get_TASK_start() < task.get_TIME_start()){
                 task.set_TASK_start(Task_process[i][0].get_TASK_start());
                 task.set_TASK_end(Task_process[i][0].get_TASK_start() + task.get_TIME_end() - task.get_TASK_start());
+                task.set_TIME_calculated(task.get_TASK_start);
             }
             
             //sort based on task_end
