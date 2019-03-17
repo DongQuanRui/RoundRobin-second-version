@@ -49,6 +49,9 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
                 count++;
                 price_cal += price.calculate_price(Task_process[i][j].get_TIME_calculated(), Task_process[i][j].get_TASK_end(),CPU_used/Server[i].get_CPU_total());
                 CPU_used -= Task_process[i][j].get_CPU_request();
+                for (int k = j+1; k<Task_process[i].size(); k++) {
+                    Task_process[i][k].set_TIME_calculated(Task_process[i][j].get_TASK_end());
+                }
             }
         }
         //pop those has finished before the task coming
