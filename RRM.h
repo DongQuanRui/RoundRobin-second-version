@@ -20,7 +20,9 @@ public:
     
     static bool sort_task_end(Task &t1, Task &t2);
     
-    double RR_M(Task task, vector< vector<Task> > &Task_process, vector< Server > Server);
+    double RR_M(Task task, vector< vector<Task> > &Task_process, vector< Server > Server, int &i);
+
+    Task cal_end(vector < vector< Task > > &Task_process, int &i);
 };
 
 
