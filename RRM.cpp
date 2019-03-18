@@ -22,12 +22,29 @@ bool RRM::sort_task_end(Task &t1,Task &t2){
     return t1.get_TASK_end() < t2.get_TASK_end();
 }
 
-double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Server > Server)
+Task RRM::cal_end(vector < vector< Task > > &Task_process, int &i)
+{
+
+        Task task_virtual;
+        sort(Task_process[i].begin(), Task_process[i].end(), sort_task_end);
+        if(Task_process[i].size() > 0)
+        {
+            double TIME_finish = Task_process[i][Task_process[i].size() - 1].get_TASK_end();
+
+            task_virtual.set_TASK_start(TIME_finish);
+            task_virtual.set_TASK_end(TIME_finish);
+        }
+
+    return task_virtual;
+}
+
+double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Server > Server, int &i)
 {
     pricemodel price;
     int num_server = Server.size();
-    //cout << "numnumnum" << num_server << endl;
-    for(int i = 0; i < num_server; i++)
+    int count_step = 0;
+    //for(int i = 0; i < num_server; i++)
+    while(count_step < num_server)
     {
         double price_cal = 0;
         double CPU_used = 0;
@@ -56,6 +73,17 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
         }
         //pop those has finished before the task coming
         Task_process[i].erase(Task_process[i].begin(), Task_process[i].begin() + count);//pop those have finished
+        //eliminate special case
+        sort(Task_process[i].begin(), Task_process[i].end(), sort_task_start);
+        if(Task_process[i].size()>0) {
+            if (Task_process[i][0].get_TASK_start() > task.get_TIME_start())
+            {
+                task.set_TASK_start(Task_process[i][0].get_TASK_start());
+                task.set_TASK_end(Task_process[i][0].get_TASK_start() + task.get_TIME_end() - task.get_TASK_start());
+                task.set_TIME_calculated(task.get_TASK_start());
+            }
+        }
+
         //smaller than 70%
         if (CPU_used + task.get_CPU_request() <= 0.7*Server[i].get_CPU_total() &&
             RAM_used + task.get_RAM_request() < Server[i].get_RAM_total())
@@ -70,6 +98,9 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
             for(int j=0;j<Task_process[i].size();j++){
                 Task_process[i][j].set_TIME_calculated(task.get_TASK_start());
             }
+            i++;
+            i%=num_server;
+
             return price_cal;
         }
         //bigger than 70%
@@ -80,17 +111,17 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
 
             //check special example
             //sort based on task_start
-            sort(Task_process[i].begin(), Task_process[i].end(), sort_task_start);
+            /*sort(Task_process[i].begin(), Task_process[i].end(), sort_task_start);
             if(Task_process[i][0].get_TASK_start() > task.get_TIME_start()){
                 task.set_TASK_start(Task_process[i][0].get_TASK_start());
                 task.set_TASK_end(Task_process[i][0].get_TASK_start() + task.get_TIME_end() - task.get_TASK_start());
                 task.set_TIME_calculated(task.get_TASK_start());
-            }
+            }*/
             
             //sort based on task_end
             sort(Task_process[i].begin(), Task_process[i].end(), sort_task_end);
             //check
-            
+            //????????????????????????????????????????
             price_cal += price.calculate_price(Task_process[i][0].get_TIME_calculated(), task.get_TASK_start(), CPU_used/Server[i].get_CPU_total());
             for (int j = 0; j < Task_process[i].size(); j++)
             {
@@ -124,6 +155,9 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
                     Task_process[i].erase(Task_process[i].begin(), Task_process[i].begin() + j + 1);//pop tasks
                     Task_process[i].push_back(task);
 
+                    i++;
+                    i%=num_server;
+
                     return price_cal;
                 }
                 else
@@ -134,10 +168,13 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
                         Task_process[i][k].set_TIME_calculated(Task_process[i][j].get_TASK_end());
                     }
                 }
+
             }
 
-
         }
+        count_step++;
+        i++;
+        i%=num_server;
     }
     return 0;
 }

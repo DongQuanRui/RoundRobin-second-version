@@ -50,8 +50,15 @@ int main() {
         task.Readfrom(infile);
         //cout << task.get_CPU_request() << endl;
         RRM M;
-        total_price += M.RR_M(task, Task_process, servers);
+        total_price += M.RR_M(task, Task_process, servers,i);
     }
+
+    for(int i=0;i<num_server;i++){
+        RRM M;
+        Task task=M.cal_end(Task_process,i);
+        total_price += M.RR_M(task,Task_process,servers,i);
+    }
+
     cout<<"Total cost: "<<total_price<<endl;
 
     infile.close();
