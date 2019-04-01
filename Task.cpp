@@ -18,7 +18,6 @@ double Task::get_TIME_start(){
     return TIME_start;
 }
 
-
 double Task::get_TIME_end(){
     return TIME_end;
 }
@@ -51,15 +50,12 @@ double Task::get_TIME_calculated(){
     return TIME_calculated;
 }
 
-
 void Task::set_SERVER_asgn(int n){
     this->SERVER_asgn = n;
-
 }
 
 void Task::set_TASK_start(double n){
     this->TASK_start = n;
-
 }
 
 void Task::set_TASK_end(double n){

@@ -17,7 +17,7 @@
 class RRM{
 public:
     static bool sort_task_start(Task &t1, Task &t2);
-    
+
     static bool sort_task_end(Task &t1, Task &t2);
     
     double RR_M(Task task, vector< vector<Task> > &Task_process, vector< Server > Server, int &i);

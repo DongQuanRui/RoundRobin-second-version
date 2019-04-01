@@ -25,11 +25,10 @@ int main() {
     vector<Task>::iterator T;
     vector<Server> servers;
     vector<Server>::iterator S;
-    
-
     ifstream infile;
     infile.open("server.csv");
     getline(infile,title);
+    //loading server information
     while(!infile.eof()){
         Server server;
         server.Readfrom(infile);
@@ -39,31 +38,22 @@ int main() {
     for (int i=0; i<num_server; i++) {
         Task_process.push_back(vector<Task>());
     }
-
     infile.close();
-    //cout << servers[0].get_CPU_total() << endl;
-    
     infile.open("task.csv");
     getline(infile,title);
+    //loading data and do RRM
     while(!infile.eof()){
         Task task;
         task.Readfrom(infile);
-        //cout << task.get_CPU_request() << endl;
         RRM M;
         total_price += M.RR_M(task, Task_process, servers,i);
     }
-
     for(int i=0;i<num_server;i++){
         RRM M;
         Task task=M.cal_end(Task_process,i);
         total_price += M.RR_M(task,Task_process,servers,i);
     }
-
     cout<<"Total cost: "<<total_price<<endl;
-
     infile.close();
-
-
-
     return 0;
 }
