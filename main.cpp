@@ -42,16 +42,46 @@ int main() {
     infile.open("task.csv");
     getline(infile,title);
     //loading data and do RRM
+    vector<double> this_task(2);
     while(!infile.eof()){
-        Task task;
-        task.Readfrom(infile);
+        vector<Task> task;
+        int line=0;
+        while(!infile.eof()){
+            Task temp_task;
+            temp_task.Readfrom(infile);
+            task.push_back(temp_task);
+            line++;
+            if (line == 10000) {
+                break;
+            }
+        }
+        //Task task;
+        //task.Readfrom(infile);
+        
         RRM M;
-        total_price += M.RR_M(task, Task_process, servers,i);
+        //vector<double, double> this_task;
+        while (task.size()!=0) {
+            Task trans;
+            trans = task.front();
+            task.erase(task.begin());
+            this_task = M.RR_M(trans, Task_process, servers,i);
+            total_price += this_task[0];
+            if(this_task[1]==0){
+                task.push_back(trans);
+                //this_task.clear();
+            }else if(this_task[1]==2){
+                continue;
+            }
+        }
+        //total_price += M.RR_M(task, Task_process, servers,i);
     }
     for(int i=0;i<num_server;i++){
         RRM M;
         Task task=M.cal_end(Task_process,i);
-        total_price += M.RR_M(task,Task_process,servers,i);
+        vector<double> this_task(2);
+        this_task = M.RR_M(task,Task_process,servers,i);
+        total_price += this_task[0];
+        //total_price += M.RR_M(task,Task_process,servers,i);
     }
     cout<<"Total cost: "<<total_price<<endl;
     infile.close();

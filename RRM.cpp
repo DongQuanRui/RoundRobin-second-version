@@ -39,8 +39,10 @@ Task RRM::cal_end(vector < vector< Task > > &Task_process, int &i)
 }
 
 //RRM
-double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Server > Server, int &i)
+vector<double> RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Server > Server, int &i)
 {
+    vector<double> this_task(2);
+    //double this_task[2];
     pricemodel price;
     int num_server = Server.size();
     int count_step = 0;
@@ -94,7 +96,12 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
             }
             i++;
             i%=num_server;
-            return price_cal;
+            
+            this_task[0] = price_cal;
+            this_task[1] = 1;
+            
+            return this_task;
+            //return price_cal;
         }
         //bigger than 70% corresponding to case 2
         else if(CPU_used+task.get_CPU_request() > 0.7*Server[i].get_CPU_total() &&
@@ -136,7 +143,12 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
                     Task_process[i].push_back(task);
                     i++;
                     i%=num_server;
-                    return price_cal;
+                    
+                    this_task[0] = price_cal;
+                    this_task[1] = 1;
+                    
+                    return this_task;
+                    //return price_cal;
                 }
                 //finally find that it is not suitable to place the task in th queue
                 else
@@ -146,14 +158,24 @@ double RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vector< Serve
                     {
                         Task_process[i][k].set_TIME_calculated(Task_process[i][j].get_TASK_end());
                     }
+                    
                 }
             }
+        }
+        else{
+            this_task[0] = 0;
+            this_task[1] = 2;
+            return this_task;
         }
         //move to next server
         count_step++;
         i++;
         i%=num_server;
     }
-    return 0;
+    this_task[0] = 0;
+    this_task[1] = 0;
+    
+    return this_task;
+    //return 0;
 }
 
