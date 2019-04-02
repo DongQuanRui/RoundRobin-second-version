@@ -42,6 +42,8 @@ int main() {
     infile.open("task.csv");
     getline(infile,title);
     //loading data and do RRM
+    //this _task is used to store the information of the cost and the state of the current task
+    //0 means task need to go back to the queue, 1 means it is scheduled, 2 means it is abandoned
     vector<double> this_task(2);
     while(!infile.eof()){
         vector<Task> task;
@@ -55,11 +57,8 @@ int main() {
                 break;
             }
         }
-        //Task task;
-        //task.Readfrom(infile);
-        
         RRM M;
-        //vector<double, double> this_task;
+        //deal with the tasks which are
         while (task.size()!=0) {
             Task trans;
             trans = task.front();
@@ -68,20 +67,18 @@ int main() {
             total_price += this_task[0];
             if(this_task[1]==0){
                 task.push_back(trans);
-                //this_task.clear();
             }else if(this_task[1]==2){
                 continue;
             }
         }
-        //total_price += M.RR_M(task, Task_process, servers,i);
     }
+    //pop the residual tasks by push a empty task
     for(int i=0;i<num_server;i++){
         RRM M;
         Task task=M.cal_end(Task_process,i);
         vector<double> this_task(2);
         this_task = M.RR_M(task,Task_process,servers,i);
         total_price += this_task[0];
-        //total_price += M.RR_M(task,Task_process,servers,i);
     }
     cout<<"Total cost: "<<total_price<<endl;
     infile.close();

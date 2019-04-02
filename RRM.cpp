@@ -96,10 +96,8 @@ vector<double> RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vecto
             }
             i++;
             i%=num_server;
-            
             this_task[0] = price_cal;
             this_task[1] = 1;
-            
             return this_task;
             //return price_cal;
         }
@@ -158,7 +156,6 @@ vector<double> RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vecto
                     {
                         Task_process[i][k].set_TIME_calculated(Task_process[i][j].get_TASK_end());
                     }
-                    
                 }
             }
         }
@@ -174,7 +171,6 @@ vector<double> RRM::RR_M(Task task,vector< vector< Task > > &Task_process, vecto
     }
     this_task[0] = 0;
     this_task[1] = 0;
-    
     return this_task;
     //return 0;
 }
